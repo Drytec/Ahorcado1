@@ -16,6 +16,8 @@ public class GameController {
     private AnchorPane anchorPane;
     @FXML private ImageView ahorcado;
     private Player player;
+    String palabra;
+
 
 
     @FXML
