@@ -19,7 +19,6 @@ public class WellcomeController {
     @FXML
     public void onHandleButtonPlay(ActionEvent event) throws IOException {
         String nickname = nicknameTextField.getText();
-        String word=wordTextField.getText();
         Player player=new Player(1, nickname );
         GameStage.getInstance().getGameController().setPlayer(player);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

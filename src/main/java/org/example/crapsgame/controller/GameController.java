@@ -11,12 +11,11 @@ import javafx.scene.layout.HBox;
 import org.example.crapsgame.model.player.Player;
 import org.example.crapsgame.model.alert.AlertBox;
 
+
 public class GameController {
     @FXML
     private AnchorPane anchorPane;
     @FXML private ImageView ahorcado;
-    private Player player;
-    String palabra;
 
     @FXML
     void initialize() {
@@ -49,4 +48,20 @@ public class GameController {
 
 public void setPlayer(Player player){
         this.player = player;
-    }}
+    }
+    private Player player;
+    /*String palabra;
+    private WellcomeController wellcomeController;
+    GameController(WellcomeController wellcomeController) {
+        this.wellcomeController = wellcomeController;
+    }
+    void ObtenerTexto() {
+        String word = wellcomeController.getWordText();
+        char[] characters = word.toCharArray();
+
+        // Creamos un Label para cada carácter
+        for (char c : characters) {
+            Label label = new Label(String.valueOf(c));
+}
+}*/
+}

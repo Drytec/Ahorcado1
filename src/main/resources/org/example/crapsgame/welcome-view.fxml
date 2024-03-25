@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="16.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.crapsgame.controller.WellcomeController">
+<VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.crapsgame.controller.WellcomeController">
    <children>
-      <Label text="Juego de Craps" textAlignment="CENTER" textFill="RED">
+      <Label text="Juego del ahorcado" textAlignment="CENTER" textFill="#2c00ff">
          <font>
             <Font name="Berlin Sans FB" size="44.0" />
          </font>
@@ -29,12 +29,19 @@
          <font>
             <Font name="SansSerif Regular" size="14.0" />
          </font></TextField>
-      <Button mnemonicParsing="false" onAction="#onHandleButtonPlay" style="-fx-background-color: red;" text="Jugar" textFill="WHITE">
+      <Label text="Digite la palabra a descubrir" textFill="#5e5e5e">
+         <font>
+            <Font name="SansSerif Bold" size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="wordTextField" alignment="CENTER" />
+      <Button mnemonicParsing="false" onAction="#onHandleButtonPlay" style="-fx-background-color: blue;" text="Jugar" textFill="WHITE">
          <font>
             <Font name="SansSerif Bold" size="18.0" />
          </font>
          <cursor>
             <Cursor fx:constant="DEFAULT" />
-         </cursor></Button>
+         </cursor>
+      </Button>
    </children>
 </VBox>
