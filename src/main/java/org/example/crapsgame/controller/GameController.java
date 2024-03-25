@@ -18,8 +18,6 @@ public class GameController {
     private Player player;
     String palabra;
 
-
-
     @FXML
     void initialize() {
         ahorcado = new ImageView();
