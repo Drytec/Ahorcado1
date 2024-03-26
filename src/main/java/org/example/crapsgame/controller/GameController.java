@@ -17,10 +17,12 @@ import org.example.crapsgame.model.alert.AlertBox;
 public class GameController {
     @FXML
     private AnchorPane anchorPane,anchorPane1;
-    @FXML private ImageView ahorcado;
     @FXML
-    private TextField comprobarTexto;
-    private WellcomeController wellcomeController;
+    private ImageView ahorcado;
+    @FXML
+    private TextField letraParaComprobar;
+    private static String wordToFind;
+    private char[] wordLetters;
 
     @FXML
     void initialize() {
@@ -28,27 +30,19 @@ public class GameController {
 
         anchorPane.getChildren().addAll(ahorcado);
     }
-    //String texto=comprobarTexto.getText();
 
     @FXML
     void OnHandleButtonThrowDice(ActionEvent event) {
         Dice diceOne = new Dice();
 
-
         int diceValue1 = diceOne.throwDice() + 1;
-
-
 
         ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/"+diceValue1+".png"))));
         //centra la imagen
 
-
         int totalDiceValue = diceValue1;
-        descomponerPalabra("HOLAA");//Hay que hacer el get y ponerlo en la funcion luego hacer if y ya gg
-        //Hpta get de ninguna manera pude hacerlo
-
-
-
+        descomponerPalabra(wordToFind);//Hay que hacer el get y ponerlo en la funcion luego hacer if y ya gg
+        comprobarTexto(wordLetters, letraParaComprobar.getText().charAt(0));
     }
 
     @FXML
@@ -61,8 +55,12 @@ public class GameController {
 
     }
 
+    public static void setWord(String text){
+        wordToFind = text;
+    }
 
-public void setPlayer(Player player){
+    public void setPlayer(Player player){
+
         this.player = player;
     }
     private Player player;
@@ -70,13 +68,25 @@ public void setPlayer(Player player){
     public void descomponerPalabra(String word) {
         HBox hbox= new HBox();
         hbox.setSpacing(10);
-        for (char c : word.toCharArray()) {
+        wordLetters = word.toCharArray();
+        for (char c : wordLetters) {
             Label label = new Label(String.valueOf(c));
             label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Sans Serif';");
             hbox.getChildren().add(label);
 
         }
         anchorPane1.getChildren().add(hbox);
+    }
+
+    public boolean comprobarTexto(char[] charArray, char letter) {
+        boolean matchingLetter = false;
+        for(char c : charArray) {
+            if(c == letter ){
+                matchingLetter = true;
+                break;
+            }
+        }
+        return matchingLetter;
     }
 
 }
