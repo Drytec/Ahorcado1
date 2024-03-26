@@ -23,6 +23,7 @@ public class GameController {
     private TextField letraParaComprobar;
     private static String wordToFind;
     private char[] wordLetters;
+    private boolean letraCoincide;
 
     @FXML
     void initialize() {
@@ -33,16 +34,12 @@ public class GameController {
 
     @FXML
     void OnHandleButtonThrowDice(ActionEvent event) {
-        Dice diceOne = new Dice();
 
-        int diceValue1 = diceOne.throwDice() + 1;
-
-        ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/"+diceValue1+".png"))));
+        ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/6.png"))));
         //centra la imagen
 
-        int totalDiceValue = diceValue1;
         descomponerPalabra(wordToFind);//Hay que hacer el get y ponerlo en la funcion luego hacer if y ya gg
-        comprobarTexto(wordLetters, letraParaComprobar.getText().charAt(0));
+        letraCoincide = comprobarTexto(wordLetters, letraParaComprobar.getText().charAt(0));
     }
 
     @FXML
