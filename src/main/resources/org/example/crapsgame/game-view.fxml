@@ -8,24 +8,28 @@
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.crapsgame.controller.GameController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-border-color: black; -fx-border-image-width: 10;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.crapsgame.controller.GameController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="157.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="237.0" minHeight="10.0" prefHeight="217.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="2">
+      <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 3; -fx-border-color: black;" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <children>
-            <ImageView fx:id="ahorcado" fitHeight="247.0" fitWidth="200.0" layoutX="40.0" layoutY="37.0" nodeOrientation="INHERIT" pickOnBounds="true">
+            <ImageView fx:id="ahorcado" fitHeight="221.0" fitWidth="200.0" layoutX="38.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true">
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
@@ -33,23 +37,32 @@
                   <Bloom />
                </effect></ImageView>
             <Button layoutX="114.0" layoutY="311.0" mnemonicParsing="false" onAction="#OnHandleButtonThrowDice" text="Jugar" />
+            <Label layoutX="64.0" layoutY="235.0" text="Digite la palabra para ganar">
+               <font>
+                  <Font name="Berlin Sans FB Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="63.0" layoutY="269.0" />
          </children>
       </AnchorPane>
-      <VBox alignment="CENTER" cache="true" prefHeight="200.0" prefWidth="100.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox alignment="CENTER" cache="true" prefHeight="206.0" prefWidth="285.0" spacing="20.0" style="-fx-border-color: black; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
             <Label lineSpacing="10.0" prefHeight="28.0" prefWidth="97.0" text="Digite una letra">
                <VBox.margin>
-                  <Insets left="46.0" />
+                  <Insets left="50.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Berlin Sans FB Bold" size="14.0" />
+               </font>
             </Label>
-            <TextField fx:id="comprobarTexto" prefHeight="20.0" prefWidth="90.0">
+            <TextField fx:id="comprobarTexto"  prefHeight="20.0" prefWidth="90.0">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </TextField>
             <Button mnemonicParsing="false" text="Comprobar">
                <VBox.margin>
-                  <Insets left="40.0" />
+                  <Insets left="50.0" />
                </VBox.margin>
             </Button>
          </children>
@@ -57,7 +70,7 @@
             <Insets />
          </GridPane.margin>
          <padding>
-            <Insets right="60.0" />
+            <Insets right="40.0" />
          </padding>
          <opaqueInsets>
             <Insets />
@@ -66,6 +79,23 @@
             <Cursor fx:constant="S_RESIZE" />
          </cursor>
       </VBox>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+      <AnchorPane fx:id="anchorPane1" prefHeight="168.0" prefWidth="300.0" style="-fx-border-color: black; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+         <center>
+            <HBox prefHeight="200.0" prefWidth="3000.0" spacing="20.0" style="-fx-background-color: blue; -fx-border-color: black; -fx-border-width: 5;" BorderPane.alignment="BOTTOM_CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" style="-fx-background-color: blue; -fx-background-radius: 7;" text="Bienvenido" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
+                     <font>
+                        <Font name="Berlin Sans FB" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="230.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#question" style="-fx-background-radius: 50; -fx-background-color: gold;" text="?" textFill="#0d0d0d" textOverrun="WORD_ELLIPSIS" />
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
    </children>
 </GridPane>

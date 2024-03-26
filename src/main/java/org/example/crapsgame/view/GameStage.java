@@ -15,7 +15,7 @@ public class GameStage extends Stage {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/crapsgame/game-view.fxml"));
         Parent root = loader.load();
         gameController = loader.getController();
-        setTitle("Partida de Craps");
+        setTitle("Ahorcado");
         Scene scene = new Scene(root);
         getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/favicon.png"))));
         setResizable(false);

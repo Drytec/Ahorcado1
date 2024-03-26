@@ -8,11 +8,6 @@ public class Player {
         this.id=id;
         this.nickname=nickname;
     }
-    public String Word(String word){
-        this.word=word;
-        return word;
-    }
-
 
 
 }
