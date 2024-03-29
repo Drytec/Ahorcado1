@@ -17,7 +17,7 @@ public class GameStage extends Stage {
         gameController = loader.getController();
         setTitle("Ahorcado");
         Scene scene = new Scene(root);
-        getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/favicon.png"))));
+        getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/favicon.png"))));
         setResizable(false);
         setScene(scene);
         show();

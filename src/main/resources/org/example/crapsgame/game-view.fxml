@@ -29,25 +29,26 @@
    <children>
       <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 3; -fx-border-color: black;" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <children>
-            <ImageView fx:id="ahorcado" fitHeight="180.0" fitWidth="175.0" layoutX="64.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true">
+            <ImageView fx:id="ahorcado" fitHeight="180.0" fitWidth="175.0" layoutX="73.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true">
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
                <effect>
                   <Bloom />
                </effect></ImageView>
-            <Button layoutX="102.0" layoutY="309.0" mnemonicParsing="false" onAction="#OnHandleButtonVerifyWord" text="Comprobar" />
-            <Label layoutX="64.0" layoutY="235.0" text="Digite la palabra para ganar">
+            <Button layoutX="113.0" layoutY="286.0" mnemonicParsing="false" onAction="#OnHandleButtonVerifyWord" style="-fx-background-color: white; -fx-border-color: blue;" text="Comprobar" textFill="#3b1dbf" />
+            <Label layoutX="59.0" layoutY="223.0" text="Digite la palabra para ganar">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="palabraParaComprobar" layoutX="63.0" layoutY="266.0" />
+            <TextField fx:id="wordToCheck" layoutX="73.0" layoutY="249.0" onMouseClicked="#setOnMouseClickedTextArea" />
+            <Label fx:id="warningWordLabel" layoutX="30.0" layoutY="328.0" prefHeight="16.0" prefWidth="282.0" text="Penalizacion: No ha ingresado la palabra" textFill="#e80808" visible="false" />
          </children>
       </AnchorPane>
       <VBox alignment="CENTER" cache="true" prefHeight="206.0" prefWidth="285.0" spacing="20.0" style="-fx-border-color: black; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Label lineSpacing="10.0" prefHeight="28.0" prefWidth="97.0" text="Digite una letra">
+            <Label alignment="BOTTOM_CENTER" lineSpacing="10.0" prefHeight="28.0" prefWidth="178.0" text="Digite una letra a la vez">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
@@ -55,16 +56,17 @@
                   <Font name="Berlin Sans FB Bold" size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="letraParaComprobar" prefHeight="20.0" prefWidth="90.0">
+            <TextField fx:id="letterToCheck" onKeyPressed="#setOnKeyPressed" prefHeight="20.0" prefWidth="90.0">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#OnHandleButtonVerifyLetter" text="Comprobar">
+            <Button mnemonicParsing="false" onAction="#OnHandleButtonVerifyLetter" style="-fx-background-color: blue; -fx-border-color: white;" text="Comprobar" textFill="#eeeded">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </Button>
+            <Label fx:id="warningLetterLabel" alignment="TOP_RIGHT" prefHeight="16.0" prefWidth="255.0" text="Aviso: solo una letra a la vez" textFill="#1d4a97" visible="false" />
          </children>
          <GridPane.margin>
             <Insets />
@@ -85,7 +87,7 @@
          </children></AnchorPane>
       <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
          <center>
-            <HBox prefHeight="200.0" prefWidth="3000.0" spacing="20.0" style="-fx-background-color: blue; -fx-border-color: black; -fx-border-width: 5;" BorderPane.alignment="BOTTOM_CENTER">
+            <HBox prefHeight="48.0" prefWidth="598.0" spacing="20.0" style="-fx-background-color: blue; -fx-border-color: black; -fx-border-width: 5;" BorderPane.alignment="BOTTOM_CENTER">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" style="-fx-background-color: blue; -fx-background-radius: 7;" text="Bienvenido" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
                      <font>

@@ -1,15 +1,14 @@
 package org.example.crapsgame.controller;
 
-import com.sun.javafx.charts.Legend;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import org.example.crapsgame.model.player.Player;
 import org.example.crapsgame.model.alert.AlertBox;
 
@@ -23,14 +22,20 @@ public class GameController {
     @FXML
     private ImageView ahorcado;
     @FXML
-    private TextField letraParaComprobar;
+    private TextField letterToCheck;
     @FXML
-    private TextField palabraParaComprobar;
+    private TextField wordToCheck;
     @FXML
     private HBox HBoxLetters;
+    @FXML
+    private Label warningWordLabel;
+    @FXML
+    private Label warningLetterLabel;
     private static String wordToFind;
     private char[] wordLetters;
     private int imageNumber = 0;
+    private int questionCounter = 0;
+
     List<Integer> positionList = new ArrayList<>();
 
     @FXML
@@ -40,40 +45,129 @@ public class GameController {
 
     @FXML
     void OnHandleButtonVerifyWord(ActionEvent event) {
-        boolean sameWord = comprobarPalabra(palabraParaComprobar.getText(), wordToFind);
+        wordToCheck.requestFocus();
+        boolean sameWord = comprobarPalabra(wordToCheck.getText(), wordToFind);
         if (sameWord){
             for(int i = 0; i < wordLetters.length; i++){
                 Label wordLabel = (Label) HBoxLetters.getChildren().get(i);
                 wordLabel.setText(String.valueOf(wordLetters[i]));
             }
+            winnigMessage();
         }
         else {
             imageNumber++;
-            ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/"+imageNumber+".png"))));
+            ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
+            warningWordLabel.setVisible(true);
+            if(imageNumber == 6){
+                lossingMesagge();
+            }
+
         }
     }
+
+    @FXML
+    void setOnMouseClickedTextArea(MouseEvent event) {
+        warningWordLabel.setVisible(false);
+    }
+
     @FXML
     void OnHandleButtonVerifyLetter(ActionEvent event){
-        positionList = comprobarLetra(wordLetters, letraParaComprobar.getText().charAt(0));
-        if (positionList.isEmpty()){
-            imageNumber++;
-            ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/Images/"+imageNumber+".png"))));
-        }
-        else {
-            for (int i = 0; i < positionList.size(); i++ ) {
-                Label lettersLabel = (Label) HBoxLetters.getChildren().get(positionList.get(i));
-                lettersLabel.setText(String.valueOf(wordLetters[positionList.get(i)]));
+        warningLetterLabel.setVisible(false);
+        letterToCheck.requestFocus();
+        String letterToLowerCase = letterToCheck.getText().toLowerCase();
+        System.out.println(letterToCheck.getText().toLowerCase());
+
+        if (isCharacter(letterToLowerCase)){
+            positionList = checkLetter(wordLetters, letterToLowerCase.charAt(0));
+            if (positionList.isEmpty()){
+                imageNumber++;
+                ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
+                if(imageNumber == 6){
+                    lossingMesagge();
+                }
+
             }
+            else {
+                for (int i = 0;i < positionList.size(); i++ ) {
+                    questionCounter++;
+                    Label lettersLabel = (Label) HBoxLetters.getChildren().get(positionList.get(i));
+                    lettersLabel.setText(String.valueOf(wordLetters[positionList.get(i)]));
+                }
+                if(wordLetters.length - questionCounter == 0){
+                    winnigMessage();
+                }
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Warning");
+            alert.setContentText("\n\nSomething went wrong:\nOnly join letters");
+            alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/crapsgame/images/eyeFavIcon.png").toString()));
+            alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            alert.showAndWait();
+
         }
+        letterToCheck.setText("");
+
+
+    }
+
+    @FXML
+    void setOnKeyPressed(KeyEvent event) {
+        if(letterToCheck.getLength() >= 1){
+            warningLetterLabel.setVisible(true);
+        }else{
+            warningLetterLabel.setVisible(false);
+        }
+    }
+
+    private Player player;
+    public void setPlayer(Player player){
+        this.player = player;
+    }
+    public Player getPlayer(){
+        return this.player;
+    }
+
+    public void winnigMessage(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Congratulations!!!");
+        alert.setContentText("You've won "+getPlayer().getNickname());
+        alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        alert.showAndWait();
+    }
+    public void lossingMesagge(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Wasted!!!");
+        alert.setContentText("You Lost "+getPlayer().getNickname());
+        alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        alert.showAndWait();
+    }
+
+
+    public boolean isCharacter(String letterToLowerCase){
+        int asciiValue = 0;
+        char character;
+        character = letterToLowerCase.charAt(0);
+        asciiValue = (int) character;
+
+
+        if (asciiValue < 97 || asciiValue > 122){
+            return false;
+
+        }else{
+            return true;
+
+        }
+
     }
 
     @FXML
     void question(ActionEvent event) {
         String title = "Información de la Partida";
-        String header = "La palabra contiene X letras";//hay que configurar eso despues
-        String content = "Te quedan X intentos";
-        new AlertBox().showMessage(title,header,content);
+        String header = "La palabra contiene "+wordLetters.length+" letras";
+        String content = "Te faltan "+(wordLetters.length - questionCounter)+" casillas\nTienes "+(6 - imageNumber)+" vidas";
 
+        new AlertBox().showMessage(title,header,content);
 
     }
 
@@ -81,36 +175,29 @@ public class GameController {
         wordToFind = text;
     }
 
-    public void setPlayer(Player player){
-
-        this.player = player;
-    }
-    private Player player;
-
-    public void descomponerPalabra(String word) {
-        HBoxLetters.setSpacing(10);
+    public void descomponerPalabra(String word) { //word = wordToFind (static), target word entered by user
+        HBoxLetters.setSpacing(10); //space between boxes
         wordLetters = word.toCharArray();
         for (char c : wordLetters) {
-            Label label = new Label(String.valueOf("__"));
+            Label label = new Label(String.valueOf("__")); //this paints the boxes
             label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Sans Serif';");
-            HBoxLetters.getChildren().add(label);
+            HBoxLetters.getChildren().add(label); //adding labels to hbox node by getchildren
         }
-    }
+    } //this mtd creates all labels(num of labels are defined by length of the target word) and add them to hbox
 
-    public boolean comprobarPalabra(String word1, String word2){
-        boolean sameWord = true;
-        char[] word1Letters = word1.toCharArray();
-        char[] word2Letters = word2.toCharArray();
-        for(int i = 0; i < word1Letters.length; i++){
-            if(word1Letters[i] != word2Letters[i]){
-                sameWord = false;
-            }
+
+    public boolean comprobarPalabra(String wordToTry, String wordToFind){
+        boolean sameWord = false;
+        if(wordToTry.equalsIgnoreCase(wordToFind)){
+            sameWord = true;
         }
+
         return sameWord;
+
     }
 
 
-    public List<Integer> comprobarLetra(char[] charArray, char letter) {
+    public List<Integer> checkLetter(char[] charArray, char letter) {
         List<Integer> positionArray = new ArrayList<>();
         for(int i = 0; i < charArray.length; i++) {
             if(charArray[i] == letter ){

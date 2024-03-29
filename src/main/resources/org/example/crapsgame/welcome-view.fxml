@@ -25,7 +25,7 @@
          <font>
             <Font name="SansSerif Bold" size="14.0" />
          </font></Label>
-      <TextField fx:id="nicknameTextField" alignment="CENTER" prefHeight="26.0" prefWidth="148.0">
+      <TextField fx:id="nicknameTextField" alignment="CENTER" onKeyPressed="#onKeyPressedUser" prefHeight="26.0" prefWidth="148.0">
          <font>
             <Font name="SansSerif Regular" size="14.0" />
          </font></TextField>
@@ -34,7 +34,7 @@
             <Font name="SansSerif Bold" size="13.0" />
          </font>
       </Label>
-      <TextField fx:id="wordTextField" alignment="CENTER" />
+      <TextField fx:id="wordTextField" alignment="CENTER" onKeyPressed="#onKeyPressedWord" />
       <Button mnemonicParsing="false" onAction="#onHandleButtonPlay" style="-fx-background-color: blue;" text="Jugar" textFill="WHITE">
          <font>
             <Font name="SansSerif Bold" size="18.0" />
