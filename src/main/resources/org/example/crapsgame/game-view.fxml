@@ -84,6 +84,7 @@
       <AnchorPane fx:id="anchorPane1" prefHeight="168.0" prefWidth="300.0" style="-fx-border-color: black; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <HBox fx:id="HBoxLetters" layoutX="7.0" layoutY="14.0" prefHeight="92.0" prefWidth="267.0" />
+            <Button layoutX="26.0" layoutY="115.0" mnemonicParsing="false" onAction="#OnHandleButtonClue" text="Pista" />
          </children></AnchorPane>
       <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
          <center>

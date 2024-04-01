@@ -14,6 +14,7 @@ import org.example.crapsgame.model.alert.AlertBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameController {
@@ -35,8 +36,10 @@ public class GameController {
     private char[] wordLetters;
     private int imageNumber = 0;
     private int questionCounter = 0;
+    private int clueCounter = 3;
 
     List<Integer> positionList = new ArrayList<>();
+    List<Integer> positionClue = new ArrayList<>();
 
     @FXML
     void initialize() {
@@ -52,17 +55,43 @@ public class GameController {
                 Label wordLabel = (Label) HBoxLetters.getChildren().get(i);
                 wordLabel.setText(String.valueOf(wordLetters[i]));
             }
-            winnigMessage();
+            winningMessage();
         }
         else {
             imageNumber++;
             ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
             warningWordLabel.setVisible(true);
             if(imageNumber == 6){
-                lossingMesagge();
+                losingMessage();
             }
 
         }
+    }
+
+    @FXML
+    void OnHandleButtonClue(ActionEvent event) {
+        if (clueCounter > 0) {
+            Random random = new Random();
+            int randomLetter = random.nextInt(wordLetters.length);
+            positionClue = checkLetter(wordLetters, wordLetters[randomLetter]);
+            for (int i = 0; i < positionClue.size(); i++) {
+                clueCounter--;
+                questionCounter++;
+                Label lettersLabel = (Label) HBoxLetters.getChildren().get(positionClue.get(i));
+                lettersLabel.setText(String.valueOf(wordLetters[positionClue.get(i)]));
+            }
+        }
+        else {
+            clueWarning();
+        }
+    }
+
+    public void clueWarning() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Advertencia");
+        alert.setContentText("No puedes utilizar más pistas, "+getPlayer().getNickname());
+        alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        alert.showAndWait();
     }
 
     @FXML
@@ -83,7 +112,7 @@ public class GameController {
                 imageNumber++;
                 ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
                 if(imageNumber == 6){
-                    lossingMesagge();
+                    losingMessage();
                 }
 
             }
@@ -94,7 +123,7 @@ public class GameController {
                     lettersLabel.setText(String.valueOf(wordLetters[positionList.get(i)]));
                 }
                 if(wordLetters.length - questionCounter == 0){
-                    winnigMessage();
+                    winningMessage();
                 }
             }
         }else{
@@ -128,17 +157,17 @@ public class GameController {
         return this.player;
     }
 
-    public void winnigMessage(){
+    public void winningMessage(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Congratulations!!!");
-        alert.setContentText("You've won "+getPlayer().getNickname());
+        alert.setTitle("Felicitaciones!!!");
+        alert.setContentText("Ganaste, "+getPlayer().getNickname());
         alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         alert.showAndWait();
     }
-    public void lossingMesagge(){
+    public void losingMessage(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Wasted!!!");
-        alert.setContentText("You Lost "+getPlayer().getNickname());
+        alert.setTitle("Game Over!!!");
+        alert.setContentText("Perdiste, "+getPlayer().getNickname());
         alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         alert.showAndWait();
     }
@@ -165,7 +194,7 @@ public class GameController {
     void question(ActionEvent event) {
         String title = "Información de la Partida";
         String header = "La palabra contiene "+wordLetters.length+" letras";
-        String content = "Te faltan "+(wordLetters.length - questionCounter)+" casillas\nTienes "+(6 - imageNumber)+" vidas";
+        String content = "Te faltan "+(wordLetters.length - questionCounter)+" casillas\nTienes "+(6 - imageNumber)+" vidas\nTe quedan " +clueCounter+ " pistas";
 
         new AlertBox().showMessage(title,header,content);
 
