@@ -84,9 +84,4 @@ public class WellcomeController {
             }
         }
     }
-
-    public String getWordText() {
-        return wordTextField.getText();
-    }
-
 }
