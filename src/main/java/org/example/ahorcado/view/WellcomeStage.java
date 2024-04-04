@@ -1,4 +1,4 @@
-package org.example.crapsgame.view;
+package org.example.ahorcado.view;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,11 +9,11 @@ import java.io.IOException;
 
 public class WellcomeStage extends Stage {
     public  WellcomeStage() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/crapsgame/welcome-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ahorcado/welcome-view.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         setScene(scene);
-        getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/favicon.png"))));
+        getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/ahorcado/images/favicon.png"))));
 
         setResizable(false);
         show();

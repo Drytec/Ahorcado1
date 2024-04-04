@@ -1,4 +1,4 @@
-package org.example.crapsgame.model.player;
+package org.example.ahorcado.model.player;
 
 public class Player {
     private int id;

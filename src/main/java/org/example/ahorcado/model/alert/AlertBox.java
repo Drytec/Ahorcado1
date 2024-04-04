@@ -1,4 +1,4 @@
-package org.example.crapsgame.model.alert;
+package org.example.ahorcado.model.alert;
 
 import javafx.scene.control.Alert;
 

@@ -1,4 +1,4 @@
-package org.example.crapsgame.controller;
+package org.example.ahorcado.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,14 +10,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.example.crapsgame.model.player.Player;
-import org.example.crapsgame.view.GameStage;
+import org.example.ahorcado.model.player.Player;
+import org.example.ahorcado.view.GameStage;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WellcomeController {
+public class WelcomeController {
     @FXML
     private TextField nicknameTextField;
     @FXML
@@ -29,7 +29,7 @@ public class WellcomeController {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Warning");
             alert.setContentText("\n\nUpss, something went wrong:\nNickname and key word have been given.");
-            alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/crapsgame/images/eyeFavIcon.png").toString()));
+            alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/ahorcado/images/eyeFavIcon.png").toString()));
             alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
             alert.showAndWait();
 
@@ -45,7 +45,7 @@ public class WellcomeController {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
                 alert.setContentText("Please check this out:\nThe word must be only letters.");
-                alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/crapsgame/images/eyeFavIcon.png").toString()));
+                alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/ahorcado/images/eyeFavIcon.png").toString()));
                 alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
                 alert.showAndWait();
             }

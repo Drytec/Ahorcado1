@@ -1,8 +1,8 @@
-package org.example.crapsgame;
+package org.example.ahorcado;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.example.crapsgame.view.WellcomeStage;
+import org.example.ahorcado.view.WellcomeStage;
 
 import java.io.IOException;
 

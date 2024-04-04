@@ -1,4 +1,4 @@
-package org.example.crapsgame.controller;
+package org.example.ahorcado.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,17 +11,20 @@ import java.io.IOException;
 import javafx.scene.control.*;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.example.crapsgame.model.player.Player;
-import org.example.crapsgame.model.alert.AlertBox;
+import org.example.ahorcado.model.player.Player;
+import org.example.ahorcado.model.alert.AlertBox;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import org.example.crapsgame.view.GameStage;
 
 import java.util.*;
 
@@ -47,6 +50,7 @@ public class GameController {
     private int questionCounter = 0;
     private int clueCounter = 3;
 
+    List<Character> wordLettersClue = new ArrayList<>();
     List<Integer> positionList = new ArrayList<>();
     List<Integer> positionClue = new ArrayList<>();
 
@@ -68,7 +72,7 @@ public class GameController {
         }
         else {
             imageNumber++;
-            ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
+            ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/ahorcado/images/" +imageNumber+".png"))));
             warningWordLabel.setVisible(true);
             if(imageNumber == 6){
                 losingMessage();
@@ -81,13 +85,18 @@ public class GameController {
     void OnHandleButtonClue(ActionEvent event) {
         if (clueCounter > 0) {
             Random random = new Random();
-            int randomLetter = random.nextInt(wordLetters.length);
-            positionClue = checkLetter(wordLetters, wordLetters[randomLetter]);
+            int randomLetterIndex = random.nextInt(wordLettersClue.size());
+            int randomIndexOldList = indexOfElement(wordLetters, wordLettersClue.get(randomLetterIndex));
+            positionClue = checkLetter(wordLetters, wordLetters[randomIndexOldList]);
             for (int i = 0; i < positionClue.size(); i++) {
-                clueCounter--;
                 questionCounter++;
                 Label lettersLabel = (Label) HBoxLetters.getChildren().get(positionClue.get(i));
                 lettersLabel.setText(String.valueOf(wordLetters[positionClue.get(i)]));
+            }
+            wordLettersClue = updateClueList(wordLettersClue, wordLetters[randomIndexOldList]);
+            clueCounter--;
+            if(wordLetters.length - questionCounter == 0){
+                winningMessage();
             }
         }
         else {
@@ -119,7 +128,7 @@ public class GameController {
             positionList = checkLetter(wordLetters, letterToLowerCase.charAt(0));
             if (positionList.isEmpty()){
                 imageNumber++;
-                ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/"+imageNumber+".png"))));
+                ahorcado.setImage(new Image(String.valueOf(getClass().getResource("/org/example/ahorcado/images/" +imageNumber+".png"))));
                 if(imageNumber == 6){
                     losingMessage();
                 }
@@ -131,6 +140,8 @@ public class GameController {
                     Label lettersLabel = (Label) HBoxLetters.getChildren().get(positionList.get(i));
                     lettersLabel.setText(String.valueOf(wordLetters[positionList.get(i)]));
                 }
+                wordLettersClue = updateClueList(wordLettersClue, letterToLowerCase.charAt(0));
+
                 if(wordLetters.length - questionCounter == 0){
                     winningMessage();
                 }
@@ -139,7 +150,7 @@ public class GameController {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Warning");
             alert.setContentText("\n\nSomething went wrong:\nOnly join letters");
-            alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/crapsgame/images/eyeFavIcon.png").toString()));
+            alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/ahorcado/images/eyeFavIcon.png").toString()));
             alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
             alert.showAndWait();
 
@@ -151,10 +162,11 @@ public class GameController {
 
     @FXML
     void setOnKeyPressed(KeyEvent event) {
-        if(letterToCheck.getLength() >= 1){
+        if (event.getCode() != KeyCode.ENTER && letterToCheck.getLength() >= 1) {
             warningLetterLabel.setVisible(true);
-        }else{
+        } else {
             warningLetterLabel.setVisible(false);
+            OnHandleButtonVerifyLetter(new ActionEvent());
         }
     }
 
@@ -168,6 +180,14 @@ public class GameController {
 
 
     public void winningMessage() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ganaste!!!");
+        alert.setHeaderText("Felicitaciones");
+        alert.setContentText("Eres un gran jugador, "+getPlayer().getNickname());
+        alert.getDialogPane().setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/ahorcado/images/win.png").toString()));
+        alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        alert.showAndWait();
         restarGame();
     }
 
@@ -176,7 +196,9 @@ public class GameController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over!!!");
         alert.setHeaderText("Puedes hacerlo mejor");
-        alert.setContentText("Perdiste, "+getPlayer().getNickname()+"La palabra era: "+wordToFind);
+        alert.setContentText("Perdiste, "+getPlayer().getNickname()+". La palabra era: "+wordToFind);
+        alert.getDialogPane().setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        alert.setGraphic(new ImageView(this.getClass().getResource("/org/example/ahorcado/images/lose.jpg").toString()));
         alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         alert.showAndWait();
         restarGame();
@@ -188,7 +210,6 @@ public class GameController {
         char character;
         character = letterToLowerCase.charAt(0);
         asciiValue = (int) character;
-
 
         if (asciiValue < 97 || asciiValue > 122){
             return false;
@@ -218,9 +239,10 @@ public class GameController {
         HBoxLetters.setSpacing(10); //space between boxes
         wordLetters = word.toCharArray();
         for (char c : wordLetters) {
-            Label label = new Label(String.valueOf("__")); //this paints the boxes
+            Label label = new Label(String.valueOf("__"));
             label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Sans Serif';");
-            HBoxLetters.getChildren().add(label); //adding labels to hbox node by getchildren
+            HBoxLetters.getChildren().add(label);
+            wordLettersClue.add(c);
         }
     } //this mtd creates all labels(num of labels are defined by length of the target word) and add them to hbox
 
@@ -246,25 +268,44 @@ public class GameController {
         return positionArray;
     }
 
+    public List<Character> updateClueList(List<Character> clueList, char letterToRemove) {
+        Iterator<Character> iterator = clueList.iterator();
+        while (iterator.hasNext()) {
+            char letter = iterator.next();
+            if (letter == letterToRemove) {
+                iterator.remove(); // Safely remove the element using the iterator
+            }
+        }
+        return clueList;
+    }
+
+    public int indexOfElement(char[] array, char element) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                return i; // Return the index if the element is found
+            }
+        }
+        return -1; // Return -1 if the element is not found
+    }
     public void restarGame(){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Reinicio");
+        alert.getDialogPane().setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         alert.setHeaderText("¿Quieres reiniciar el juego o salir?");
 
         ButtonType buttonTypeOne = new ButtonType("Reiniciar");
         ButtonType buttonTypeTwo = new ButtonType("Salir");
-        ButtonType buttonTypeCancel = new ButtonType("Cancelar");
 
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne){
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/crapsgame/welcome-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ahorcado/welcome-view.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setTitle("Ahorcado");
-                stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/favicon.png"))));
+                stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/ahorcado/images/favicon.png"))));
                 stage.setResizable(false);
                 stage.setScene(new Scene(root));
                 stage.show();
@@ -273,8 +314,6 @@ public class GameController {
             }
         } else if (result.get() == buttonTypeTwo) {
             Platform.exit();
-        } else {
-            // El usuario ha pulsado el botón Cancelar, no hagas nada
         }
     }
 }
