@@ -2,19 +2,28 @@ package org.example.crapsgame.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import java.io.IOException;
+import javafx.scene.control.*;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import org.example.crapsgame.model.player.Player;
 import org.example.crapsgame.model.alert.AlertBox;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import org.example.crapsgame.view.GameStage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class GameController {
@@ -43,7 +52,7 @@ public class GameController {
 
     @FXML
     void initialize() {
-        descomponerPalabra(wordToFind);//Se descompone la palabra en un Array de letras Char y se muestra cantidad de letras
+        descomponerPalabra(wordToFind.toLowerCase());//Se descompone la palabra en un Array de letras Char y se muestra cantidad de letras
     }
 
     @FXML
@@ -157,19 +166,20 @@ public class GameController {
         return this.player;
     }
 
-    public void winningMessage(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Felicitaciones!!!");
-        alert.setContentText("Ganaste, "+getPlayer().getNickname());
-        alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        alert.showAndWait();
+
+    public void winningMessage() {
+        restarGame();
     }
+
+
     public void losingMessage(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over!!!");
-        alert.setContentText("Perdiste, "+getPlayer().getNickname());
+        alert.setHeaderText("Puedes hacerlo mejor");
+        alert.setContentText("Perdiste, "+getPlayer().getNickname()+"La palabra era: "+wordToFind);
         alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         alert.showAndWait();
+        restarGame();
     }
 
 
@@ -235,4 +245,37 @@ public class GameController {
         }
         return positionArray;
     }
+
+    public void restarGame(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Reinicio");
+        alert.setHeaderText("¿Quieres reiniciar el juego o salir?");
+
+        ButtonType buttonTypeOne = new ButtonType("Reiniciar");
+        ButtonType buttonTypeTwo = new ButtonType("Salir");
+        ButtonType buttonTypeCancel = new ButtonType("Cancelar");
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne){
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/crapsgame/welcome-view.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setTitle("Ahorcado");
+                stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/org/example/crapsgame/images/favicon.png"))));
+                stage.setResizable(false);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (result.get() == buttonTypeTwo) {
+            Platform.exit();
+        } else {
+            // El usuario ha pulsado el botón Cancelar, no hagas nada
+        }
+    }
 }
+
